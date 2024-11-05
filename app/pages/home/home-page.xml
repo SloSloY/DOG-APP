@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="onNavigatingTo">
+    <ActionBar title="WoofFinder" class="bg-blue-500 text-white">
+        <NavigationButton visibility="collapsed" />
+        <ActionItem ios.position="right" android.position="actionBar">
+            <Label text="🔔" class="text-2xl" tap="{{ onNotifications }}" />
+        </ActionItem>
+    </ActionBar>
+
+    <TabView selectedIndex="{{ selectedTab }}" class="bg-gray-100">
+        <!-- Onglet Découvrir -->
+        <TabViewItem title="Découvrir" class="text-blue-500">
+            <GridLayout rows="*, auto">
+                <StackLayout row="0">
+                    <CardView class="m-4 rounded-xl bg-white elevation-5">
+                        <StackLayout>
+                            <Image src="{{ currentDog.image }}" class="h-96 rounded-t-xl" stretch="aspectFill"/>
+                            <StackLayout class="p-4">
+                                <GridLayout columns="*, auto" class="mb-2">
+                                    <Label text="{{ currentDog.name }}" class="text-2xl font-bold" col="0"/>
+                                    <Label text="{{ currentDog.age + ' ans' }}" class="text-lg text-gray-500" col="1"/>
+                                </GridLayout>
+                                <Label text="{{ '📍 ' + currentDog.location }}" class="text-gray-500 mb-2"/>
+                                <Label text="{{ currentDog.description }}" textWrap="true" class="text-gray-700"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </CardView>
+                </StackLayout>
+                <GridLayout row="1" columns="auto, *, auto" class="p-4">
+                    <Button text="✕" tap="{{ onReject }}" class="w-16 h-16 rounded-full bg-red-500 text-white text-2xl" col="0"/>
+                    <Button text="💬" tap="{{ onMessage }}" class="w-14 h-14 rounded-full bg-blue-400 text-white text-xl" col="1"/>
+                    <Button text="♥" tap="{{ onLike }}" class="w-16 h-16 rounded-full bg-green-500 text-white text-2xl" col="2"/>
+                </GridLayout>
+            </GridLayout>
+        </TabViewItem>
+
+        <!-- Onglet Messages -->
+        <TabViewItem title="Messages" class="text-blue-500">
+            <StackLayout>
+                <SearchBar hint="Rechercher..." class="bg-white" />
+                <ListView items="{{ conversations }}" class="list-group">
+                    <ListView.itemTemplate>
+                        <GridLayout columns="auto, *, auto" class="p-4 border-b border-gray-200">
+                            <Image src="{{ profileImage }}" class="w-12 h-12 rounded-full" col="0" stretch="aspectFill"/>
+                            <StackLayout col="1" class="ml-4">
+                                <Label text="{{ name }}" class="font-bold"/>
+                                <Label text="{{ lastMessage }}" class="text-gray-500"/>
+                            </StackLayout>
+                            <Label text="{{ time }}" class="text-xs text-gray-400" col="2"/>
+                        </GridLayout>
+                    </ListView.itemTemplate>
+                </ListView>
+            </StackLayout>
+        </TabViewItem>
+
+        <!-- Onglet Poster -->
+        <TabViewItem title="Poster" class="text-blue-500">
+            <ScrollView>
+                <StackLayout class="p-4">
+                    <CardView class="bg-white rounded-xl elevation-3 m-2">
+                        <StackLayout class="p-4">
+                            <GridLayout columns="*, auto" class="mb-4">
+                                <Label text="Ajouter un chien" class="text-xl font-bold" col="0"/>
+                                <Button text="📸" tap="{{ onTakePhoto }}" class="bg-blue-500 text-white rounded-full w-12 h-12" col="1"/>
+                            </GridLayout>
+                            
+                            <Image src="{{ newDogImage }}" class="h-64 rounded-lg" visibility="{{ newDogImage ? 'visible' : 'collapsed' }}"/>
+                            
+                            <TextField hint="Nom du chien" text="{{ dogName }}" class="input p-4 border-b"/>
+                            <TextField hint="Âge" text="{{ dogAge }}" keyboardType="number" class="input p-4 border-b"/>
+                            <TextField hint="Race" text="{{ dogBreed }}" class="input p-4 border-b"/>
+                            <TextField hint="Localisation" text="{{ location }}" class="input p-4 border-b"/>
+                            <TextView hint="Description" text="{{ description }}" class="input p-4 h-32 border rounded-lg mt-2"/>
+                            
+                            <Button text="Publier" tap="{{ onPost }}" class="bg-blue-500 text-white p-4 rounded-lg mt-4"/>
+                        </StackLayout>
+                    </CardView>
+                </StackLayout>
+            </ScrollView>
+        </TabViewItem>
+
+        <!-- Onglet Profil -->
+        <TabViewItem title="Profil" class="text-blue-500">
+            <ScrollView>
+                <StackLayout class="p-4">
+                    <!-- En-tête du profil -->
+                    <CardView class="bg-white rounded-xl elevation-3 m-2">
+                        <StackLayout class="p-4">
+                            <Image src="{{ userProfile.image }}" class="h-32 w-32 rounded-full self-center"/>
+                            <Label text="{{ userProfile.name }}" class="text-2xl font-bold text-center mt-2"/>
+                            <Label text="{{ userProfile.bio }}" class="text-gray-500 text-center"/>
+                            
+                            <GridLayout columns="auto, auto, auto" class="mt-4">
+                                <StackLayout col="0" class="text-center p-2">
+                                    <Label text="{{ userProfile.posts }}" class="font-bold"/>
+                                    <Label text="Posts" class="text-gray-500"/>
+                                </StackLayout>
+                                <StackLayout col="1" class="text-center p-2">
+                                    <Label text="{{ userProfile.followers }}" class="font-bold"/>
+                                    <Label text="Followers" class="text-gray-500"/>
+                                </StackLayout>
+                                <StackLayout col="2" class="text-center p-2">
+                                    <Label text="{{ userProfile.following }}" class="font-bold"/>
+                                    <Label text="Following" class="text-gray-500"/>
+                                </StackLayout>
+                            </GridLayout>
+                            
+                            <Button text="Modifier le profil" tap="{{ onEditProfile }}" class="bg-blue-500 text-white p-3 rounded-lg mt-4"/>
+                        </StackLayout>
+                    </CardView>
+
+                    <!-- Paramètres -->
+                    <CardView class="bg-white rounded-xl elevation-3 m-2">
+                        <StackLayout class="p-4">
+                            <Label text="Paramètres" class="text-xl font-bold mb-4"/>
+                            
+                            <GridLayout rows="auto, auto" columns="*, auto" class="mb-4">
+                                <Label text="Rayon de recherche" class="text-lg" row="0" col="0"/>
+                                <Label text="{{ searchRadius + ' km' }}" class="text-gray-500" row="0" col="1"/>
+                                <Slider value="{{ searchRadius }}" minValue="1" maxValue="50" row="1" colSpan="2"/>
+                            </GridLayout>
+                            
+                            <GridLayout columns="*, auto" class="p-2 border-b">
+                                <Label text="Notifications" class="text-lg"/>
+                                <Switch checked="{{ notificationsEnabled }}" col="1"/>
+                            </GridLayout>
+                            
+                            <GridLayout columns="*, auto" class="p-2 border-b">
+                                <Label text="Mode sombre" class="text-lg"/>
+                                <Switch checked="{{ darkMode }}" col="1"/>
+                            </GridLayout>
+                            
+                            <Button text="Se déconnecter" tap="{{ onLogout }}" class="bg-red-500 text-white p-4 rounded-lg mt-4"/>
+                        </StackLayout>
+                    </CardView>
+                </StackLayout>
+            </ScrollView>
+        </TabViewItem>
+    </TabView>
+</Page>

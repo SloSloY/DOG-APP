@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="onNavigatingTo" class="bg-gray-100">
+    <ActionBar title="WoofFinder" class="bg-blue-500 text-white"/>
+    
+    <StackLayout class="p-6">
+        <Image src="~/images/logo.png" class="h-32 w-32 self-center mb-8" stretch="aspectFit"/>
+        
+        <TextField 
+            hint="Email" 
+            text="{{ email }}" 
+            keyboardType="email" 
+            autocorrect="false" 
+            autocapitalizationType="none"
+            class="p-4 bg-white rounded-lg mb-4"/>
+        
+        <TextField 
+            hint="Mot de passe" 
+            text="{{ password }}" 
+            secure="true" 
+            class="p-4 bg-white rounded-lg mb-6"/>
+        
+        <Button 
+            text="Se connecter" 
+            tap="{{ onLogin }}" 
+            isEnabled="{{ !isLoading }}"
+            class="bg-blue-500 text-white p-4 rounded-lg mb-4"/>
+        
+        <Button 
+            text="S'inscrire" 
+            tap="{{ onRegister }}" 
+            isEnabled="{{ !isLoading }}"
+            class="bg-green-500 text-white p-4 rounded-lg"/>
+        
+        <ActivityIndicator busy="{{ isLoading }}" class="m-4"/>
+        
+        <Label 
+            text="{{ errorMessage }}" 
+            class="text-red-500 text-center mt-4" 
+            textWrap="true"
+            visibility="{{ errorMessage ? 'visible' : 'collapsed' }}"/>
+    </StackLayout>
+</Page>
